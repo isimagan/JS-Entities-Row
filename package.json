@@ -1,0 +1,14 @@
+{
+  "name": "js-entities-row",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --format=esm --target=es2022 --legal-comments=none --outfile=dist/js-entities-row.js",
+    "test": "node --test",
+    "check": "npm test && npm run build"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}
