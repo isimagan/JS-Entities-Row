@@ -309,17 +309,17 @@ function createRowModel(config, hass) {
     stateObject,
     showRow: readBoolean(config.show_row, true, context, "show_row"),
     name: text(
-      read(
-        config.name ?? stateObject?.attributes?.friendly_name ?? config.entity
-      )
+      config.name === void 0 ? stateObject?.attributes?.friendly_name ?? config.entity : read(config.name)
     ),
     state: text(
       configuredState === void 0 ? formatState(config, hass, stateObject, showUnit) : read(configuredState)
     ),
     secondaryInfo: secondaryInfo(config, hass, stateObject, read),
-    icon: text(read(config.icon ?? stateObject?.attributes?.icon)),
+    icon: text(
+      config.icon === void 0 ? stateObject?.attributes?.icon : read(config.icon)
+    ),
     image: text(
-      read(config.image ?? stateObject?.attributes?.entity_picture)
+      config.image === void 0 ? stateObject?.attributes?.entity_picture : read(config.image)
     ),
     color: text(read(config.color)),
     actionName: text(read(config.action_name))
