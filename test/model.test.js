@@ -51,6 +51,33 @@ test("templates can customize row values and visibility", () => {
   assert.equal(model.showRow, true);
 });
 
+test("entity metadata is never evaluated as a JavaScript template", () => {
+  globalThis.entityMetadataTemplateExecuted = false;
+  const metadataTemplate =
+    "[[[ globalThis.entityMetadataTemplateExecuted = true; return 'unsafe'; ]]]";
+  const metadataEntity = {
+    ...entity,
+    attributes: {
+      ...entity.attributes,
+      friendly_name: metadataTemplate,
+      icon: metadataTemplate,
+      entity_picture: metadataTemplate,
+    },
+  };
+  const metadataHass = {
+    ...hass,
+    states: { [metadataEntity.entity_id]: metadataEntity },
+  };
+
+  const model = createRowModel({ entity: metadataEntity.entity_id }, metadataHass);
+
+  assert.equal(globalThis.entityMetadataTemplateExecuted, false);
+  assert.equal(model.name, metadataTemplate);
+  assert.equal(model.icon, metadataTemplate);
+  assert.equal(model.image, metadataTemplate);
+  delete globalThis.entityMetadataTemplateExecuted;
+});
+
 test("show_unit and native secondary information are supported", () => {
   const model = createRowModel(
     {
